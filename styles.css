@@ -1,0 +1,58 @@
+:root{
+  --bg:#070707;
+  --card:#0f0f12;
+  --muted:#9aa7a6;
+  --accent:#ff2f7a; /* change if you want Gensyn pink */
+  --glass: rgba(255,255,255,0.03);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:linear-gradient(180deg,#020203 0%, #061018 100%);color:#e6eef2}
+.container{max-width:1200px;margin:28px auto;padding:20px}
+.site-header{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
+.logo{font-weight:700;letter-spacing:0.4px}
+.hero{padding:18px 0;border-bottom:1px solid rgba(255,255,255,0.03);margin-bottom:18px}
+.lead{color:var(--muted);margin-top:6px}
+
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  margin:20px 0 40px;
+}
+
+/* Card */
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  border:1px solid rgba(255,255,255,0.03);
+  transition:transform .2s ease, box-shadow .2s;
+}
+.card:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.7); }
+.card .cover{height:140px;background:#111;background-size:cover;background-position:center;}
+.card .body{padding:14px}
+.card h3{margin:0 0 6px;font-size:18px}
+.card p{margin:0;color:var(--muted);font-size:13px}
+.card a{display:inline-block;margin-top:10px;color:var(--accent);text-decoration:none;font-weight:600}
+
+/* Footprints */
+.footprint{margin-top:30px;padding:14px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:10px}
+.form{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.form label{display:flex;flex-direction:column;font-size:13px;color:var(--muted)}
+.form input[type="text"], .form input[type="file"]{
+  padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit
+}
+.form button{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+
+.footprints-grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.footprint-card{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+.footprint-card img{width:48px;height:48px;border-radius:8px;object-fit:cover}
+.footprint-card .meta{font-size:14px;color:#dfeff2}
+
+.footer{text-align:center;margin-top:34px;color:var(--muted)}
+@media (max-width:520px){
+  .form{flex-direction:column;align-items:stretch}
+}
