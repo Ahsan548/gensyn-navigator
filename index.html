@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gensyn Navigator — Cards</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">🔷 <strong>Gensyn Navigator</strong></div>
+    <nav>Quick demo • Cards • Footprints</nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Explore Gensyn projects</h1>
+      <p class="lead">Click a card to open the project page. Leave your footprint below — your contribution will appear in the album.</p>
+    </section>
+
+    <section id="cards" class="cards-grid" aria-label="projects">
+      <!-- Cards are rendered by script.js -->
+    </section>
+
+    <section class="footprint">
+      <h2>Leave your footprint</h2>
+      <p>Enter your Twitter handle, upload a small avatar and click submit. Your footprint will appear in the album below.</p>
+
+      <form id="footprintForm" class="form">
+        <label>
+          Twitter handle
+          <input id="twitter" name="twitter" placeholder="@yourhandle" required />
+        </label>
+
+        <label>
+          Upload avatar (png/jpg)
+          <input id="avatar" name="avatar" type="file" accept="image/*" />
+        </label>
+
+        <button type="submit">Submit footprint</button>
+      </form>
+
+      <div id="footprints" class="footprints-grid">
+        <!-- footprints appear here -->
+      </div>
+    </section>
+
+    <footer class="footer">
+      <small>Starter repo • Replace assets/* with your images • Deploy on Vercel</small>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
