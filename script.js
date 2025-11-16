@@ -1,32 +1,10 @@
-/* projects (make sure matching files exist in /assets with these exact names) */
+/* ---------- projects (make sure matching files exist in /assets) ---------- */
 const projects = [
-  {
-    id: 'blockassist',
-    title: 'BlockAssist',
-    cover: 'assets/blockassist.jpg',
-    url: 'https://blog.gensyn.ai/introducing-blockassist/'
-  },
-  {
-    id: 'rlswarm',
-    title: 'RL Swarm',
-    cover: 'assets/rl-swarm.jpg',
-    url: 'https://blog.gensyn.ai/codezero-extending-rl-swarm-toward-cooperative-coding-agents/'
-  },
-  {
-    id: 'judge',
-    title: 'Judge',
-    cover: 'assets/judge.jpg',
-    url: 'https://blog.gensyn.ai/introducing-judge/'
-  },
-  {
-    id: 'codeassist',
-    title: 'CodeAssist',
-    cover: 'assets/codeassist.jpg',
-    url: 'https://blog.gensyn.ai/introducing-codeassist/'
-  }
+  { id: 'blockassist', title: 'BlockAssist', cover: 'assets/blockassist.jpg', url: 'https://blog.gensyn.ai/introducing-blockassist/' },
+  { id: 'rlswarm',     title: 'RL Swarm',     cover: 'assets/rl-swarm.jpg',     url: 'https://blog.gensyn.ai/codezero-extending-rl-swarm-toward-cooperative-coding-agents/' },
+  { id: 'judge',       title: 'Judge',        cover: 'assets/judge.jpg',        url: 'https://blog.gensyn.ai/introducing-judge/' },
+  { id: 'codeassist',  title: 'CodeAssist',   cover: 'assets/codeassist.jpg',   url: 'https://blog.gensyn.ai/introducing-codeassist/' }
 ];
-
-
 
 function makeCard(p){
   const el = document.createElement('article');
@@ -45,29 +23,79 @@ function makeCard(p){
 const cardsRoot = document.getElementById('cards');
 projects.forEach(p => cardsRoot.appendChild(makeCard(p)));
 
-/* ---------------- footprints (localStorage) ---------------- */
+/* ---------------- footprints (Supabase integration + fallback) ---------------- */
+
+/* ---------- Supabase values (inserted as requested) ---------- */
+const SUPABASE_URL = "https://ubontnwcxgxwsoqjstkm.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVib250bndjeGd4d3NvcWpzdGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMDA0NDksImV4cCI6MjA3ODg3NjQ0OX0.Frf-E3eJUseC291It2CGYJKj3rK53ms10y6MiUARSzs";
+/* -------------------------------------------------------------------------------- */
+
+let supabaseClient = null;
+try {
+  if (SUPABASE_URL && SUPABASE_ANON && !SUPABASE_URL.includes("YOUR_PROJECT_ID")) {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  } else {
+    console.warn("Supabase not configured. Falling back to localStorage.");
+  }
+} catch(e){
+  console.warn("Supabase client error, using fallback:", e);
+  supabaseClient = null;
+}
+
 const form = document.getElementById('footprintForm');
 const footprintsRoot = document.getElementById('footprints');
 
-function readStorage(){ 
-  try { return JSON.parse(localStorage.getItem('gensyn_footprints')||'[]'); }
-  catch(e){ return []; }
-}
-function writeStorage(arr){ localStorage.setItem('gensyn_footprints', JSON.stringify(arr)); }
-
-function renderFootprints(){
+async function loadFootprints() {
   footprintsRoot.innerHTML = '';
-  const items = readStorage().reverse();
+
+  if (supabaseClient) {
+    // fetch global footprints from Supabase
+    const { data, error } = await supabaseClient
+      .from('footprints')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(200);
+
+    if (error) {
+      console.error("Supabase fetch error:", error);
+      renderFallback();
+      return;
+    }
+
+    data.forEach(it => {
+      const card = document.createElement('div'); card.className='footprint-card';
+      const img = document.createElement('img');
+      img.src = it.avatar || `https://picsum.photos/seed/${encodeURIComponent(it.twitter)}/80`;
+      const meta = document.createElement('div'); meta.className='meta';
+      meta.innerHTML = `<strong>${escapeHtml(it.twitter)}</strong><div style="color:var(--muted);font-size:12px">${new Date(it.created_at).toLocaleString()}</div>`;
+      card.appendChild(img); card.appendChild(meta); footprintsRoot.appendChild(card);
+    });
+
+  } else {
+    // local fallback
+    renderFallback();
+  }
+}
+
+function renderFallback(){
+  const items = JSON.parse(localStorage.getItem('gensyn_footprints')||'[]').slice().reverse();
   items.forEach(it=>{
     const card = document.createElement('div'); card.className='footprint-card';
     const img = document.createElement('img');
     img.src = it.avatar || 'https://picsum.photos/seed/' + encodeURIComponent(it.twitter) + '/80';
     const meta = document.createElement('div'); meta.className='meta';
-    meta.innerHTML = `<strong>${it.twitter}</strong><div style="color:var(--muted);font-size:12px">${new Date(it.at).toLocaleString()}</div>`;
+    meta.innerHTML = `<strong>${escapeHtml(it.twitter)}</strong><div style="color:var(--muted);font-size:12px">${new Date(it.at).toLocaleString()}</div>`;
     card.appendChild(img); card.appendChild(meta); footprintsRoot.appendChild(card);
   });
 }
-renderFootprints();
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(ch){
+    return ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[ch];
+  });
+}
 
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
@@ -76,7 +104,7 @@ form.addEventListener('submit', async (e)=>{
 
   if(!twitter) return alert('Please enter Twitter handle');
 
-  // quick avatar as dataURL (small)
+  // prepare avatar as dataURL (small)
   let avatarUrl = '';
   if(file){
     avatarUrl = await new Promise(res=>{
@@ -86,24 +114,31 @@ form.addEventListener('submit', async (e)=>{
     });
   }
 
-  const list = readStorage();
-  list.push({twitter, avatar: avatarUrl, at: Date.now()});
-  writeStorage(list);
-  renderFootprints();
+  if (supabaseClient) {
+    // insert into Supabase
+    const { error } = await supabaseClient.from('footprints').insert([{ twitter, avatar: avatarUrl }]);
+    if (error) {
+      console.error("Supabase insert error:", error);
+      alert("Failed to save to server; saved locally instead.");
+      saveLocal(twitter, avatarUrl);
+    } else {
+      // success: reload list
+      await loadFootprints();
+    }
+  } else {
+    // fallback save locally
+    saveLocal(twitter, avatarUrl);
+    loadFootprints();
+  }
+
   form.reset();
 });
 
-/* ---------------- optional: Supabase example
-// If you want footprints saved globally (so everyone sees them), use Supabase.
-// 1) create a table 'footprints' with columns: id (uuid pk), twitter text, avatar text, created_at timestamptz default now()
-// 2) set SUPABASE_URL & SUPABASE_ANON in .env (never expose private keys in public repos!)
-
-const SUPABASE_URL = 'https://your-project.supabase.co';
-const SUPABASE_ANON = 'public-anon-key';
-const supabase = supabaseCreateClient(SUPABASE_URL, SUPABASE_ANON);
-
-async function saveToSupabase(twitter, avatarData){
-  const { data, error } = await supabase.from('footprints').insert([{ twitter, avatar: avatarData }]);
-  if(error) console.error(error);
+function saveLocal(twitter, avatarUrl) {
+  const list = JSON.parse(localStorage.getItem('gensyn_footprints')||'[]');
+  list.push({ twitter, avatar: avatarUrl, at: Date.now() });
+  localStorage.setItem('gensyn_footprints', JSON.stringify(list));
 }
-*/
+
+/* initial load */
+loadFootprints();
