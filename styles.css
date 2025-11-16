@@ -1,34 +1,70 @@
 :root{
-  --bg:#020203;
-  --bg-2:#061018;
+  --bg:#070707;
   --card:#0f0f12;
   --muted:#9aa7a6;
-  --accent:#ff2f7a;        /* Gensyn accent (deep rose) */
+  --accent:#ff2f7a;
   --glass: rgba(255,255,255,0.03);
-  --text:#e6eef2;
-  --brand-size:36px;
+  --brand-size: 38px;
+
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/* Reset + base */
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 100%);color:var(--text);-webkit-font-smoothing:antialiased}
-a{color:inherit}
-.container{max-width:1200px;margin:28px auto;padding:20px}
 
-/* Header / brand */
-.site-header{display:flex;justify-content:space-between;align-items:center;padding:14px 0;gap:12px}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
-.brand-logo{width:var(--brand-size);height:var(--brand-size);display:inline-block;object-fit:contain;border-radius:6px;background:transparent}
-.brand-name{font-weight:700;letter-spacing:0.2px;font-size:18px}
-.site-header nav{color:var(--muted);font-size:14px}
+html,body{
+  height:100%;
+  margin:0;
+  background:linear-gradient(180deg,#020203 0%, #061018 100%);
+  color:#e6eef2;
+}
 
-/* Hero */
-.hero{padding:18px 0;border-bottom:1px solid rgba(255,255,255,0.03);margin-bottom:18px}
-.hero h1{margin:0;font-size:32px}
-.lead{color:var(--muted);margin-top:8px;max-width:850px}
+.container{
+  max-width:1200px;
+  margin:28px auto;
+  padding:20px;
+}
 
-/* Cards grid */
+/* HEADER */
+.site-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0 20px 0;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:inherit;
+}
+
+.brand-logo{
+  width:var(--brand-size);
+  height:var(--brand-size);
+  object-fit:contain;
+  border-radius:6px;
+}
+
+.brand-name{
+  font-weight:700;
+  font-size:20px;
+}
+
+/* HERO */
+.hero{
+  padding:18px 0;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  margin-bottom:18px;
+}
+
+.lead{
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* PROJECT CARDS */
 .cards-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -36,67 +72,111 @@ a{color:inherit}
   margin:20px 0 40px;
 }
 
-/* Card */
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
   border-radius:10px;
   overflow:hidden;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.55);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
   border:1px solid rgba(255,255,255,0.03);
-  transition:transform .22s ease, box-shadow .22s;
+  transition:transform .2s ease, box-shadow .2s;
 }
-.card:hover{ transform: translateY(-8px); box-shadow: 0 22px 50px rgba(0,0,0,0.7); }
-.card .cover{height:160px;background:#111;background-size:cover;background-position:center;filter:contrast(1.02) saturate(1.05)}
-.card .body{padding:16px}
+
+.card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+}
+
+.card .cover{
+  height:140px;
+  background:#111;
+  background-size:cover;
+  background-position:center;
+}
+
+.card .body{padding:14px}
 .card h3{margin:0 0 6px;font-size:18px}
 .card p{margin:0;color:var(--muted);font-size:13px}
-.card a{display:inline-block;margin-top:12px;color:var(--accent);text-decoration:none;font-weight:700}
+.card a{margin-top:10px;color:var(--accent);text-decoration:none;font-weight:600;display:inline-block}
 
-/* Make image title overlay subtle (if title overlaps cover) */
-.card .cover .title-overlay{
-  position:relative;
-  padding:10px;
-  color:rgba(255,255,255,0.95);
-  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+/* FOOTPRINTS */
+.footprint{
+  margin-top:40px;
+  padding:20px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.04);
 }
 
-/* Footprints section */
-.footprint{margin-top:30px;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
-.form{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
-.form label{display:flex;flex-direction:column;font-size:13px;color:var(--muted)}
-.form input[type="text"], .form input[type="file"]{
-  padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:inherit;min-width:200px
+.form{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:flex-end;
 }
-.form input::placeholder{color:rgba(230,238,242,0.45)}
-.form button{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:700;box-shadow:0 6px 18px rgba(255,47,122,0.12)}
 
-/* Footprint cards */
-.footprints-grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
-.footprint-card{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02);padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
-.footprint-card img{width:48px;height:48px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,0.03)}
-.footprint-card .meta{font-size:14px;color:var(--muted)}
-
-/* Footer */
-.footer{text-align:center;margin-top:34px;color:var(--muted);padding:12px 0}
-.footer .credit{display:block;margin-top:8px;color:var(--muted)}
-.footer a{color:var(--accent);text-decoration:none}
-
-/* Small tweaks */
-.card .body h3{color:var(--text)}
-@media (max-width:880px){
-  .hero h1{font-size:26px}
-  .brand-name{font-size:16px}
+.form label{
+  display:flex;
+  flex-direction:column;
+  font-size:13px;
+  color:var(--muted);
 }
+
+.form input{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.04);
+  background:var(--glass);
+  color:inherit;
+}
+
+.form button{
+  background:var(--accent);
+  color:#fff;
+  padding:10px 14px;
+  border-radius:8px;
+  border:0;
+  cursor:pointer;
+}
+
+.footprints-grid{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+.footprint-card{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,255,255,0.02);
+  padding:8px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.03);
+}
+
+.footprint-card img{
+  width:48px;
+  height:48px;
+  border-radius:8px;
+  object-fit:cover;
+}
+
+.footer{
+  text-align:center;
+  margin-top:40px;
+  color:var(--muted);
+}
+
+.footer a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+}
+
 @media (max-width:520px){
-  .form{flex-direction:column;align-items:stretch}
-  .brand-name{display:none} /* keep header compact on tiny screens */
-}
-
-/* OPTIONAL: subtle vignette to match Gensyn aesthetic */
-body::after{
-  content:"";
-  position:fixed;left:0;right:0;top:0;bottom:0;
-  pointer-events:none;
-  background: radial-gradient(60% 40% at 50% 20%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.18) 60%, rgba(0,0,0,0.35) 100%);
-  mix-blend-mode:multiply;
+  .form{
+    flex-direction:column;
+    align-items:stretch;
+  }
 }
