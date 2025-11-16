@@ -1,10 +1,31 @@
-/* ---------- projects data: replace image file names with your assets ---------- */
+/* projects (make sure matching files exist in /assets with these exact names) */
 const projects = [
-  { id: 'blockassist', title: 'BlockAssist', cover: 'assets/blockassist.jpg', url: 'https://blog.gensyn.ai/introducing-blockassist/' },
-  { id: 'rlswarm',     title: 'RL Swarm',    cover: 'assets/rl-swarm.jpg',     url: 'https://blog.gensyn.ai/codezero-extending-rl-swarm-toward-cooperative-coding-agents/' },
-  { id: 'judge',       title: 'Judge',       cover: 'assets/judge.jpg',       url: 'https://blog.gensyn.ai/introducing-judge/' },
-  { id: 'codeassist',  title: 'CodeAssist',  cover: 'assets/codeassist.jpg',  url: 'https://blog.gensyn.ai/introducing-codeassist/' }
+  {
+    id: 'blockassist',
+    title: 'BlockAssist',
+    cover: 'assets/blockassist.jpg',
+    url: 'https://blog.gensyn.ai/introducing-blockassist/'
+  },
+  {
+    id: 'rlswarm',
+    title: 'RL Swarm',
+    cover: 'assets/rl-swarm.jpg',
+    url: 'https://blog.gensyn.ai/codezero-extending-rl-swarm-toward-cooperative-coding-agents/'
+  },
+  {
+    id: 'judge',
+    title: 'Judge',
+    cover: 'assets/judge.jpg',
+    url: 'https://blog.gensyn.ai/introducing-judge/'
+  },
+  {
+    id: 'codeassist',
+    title: 'CodeAssist',
+    cover: 'assets/codeassist.jpg',
+    url: 'https://blog.gensyn.ai/introducing-codeassist/'
+  }
 ];
+
 
 
 function makeCard(p){
